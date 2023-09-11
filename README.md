@@ -7,3 +7,5 @@ Algorithms and data structures student project.
 * [Testing documentation](documentation/testing.md)
 * [Implementation documentation](documentation/implementation.md)
 * [Weekly reports](documentation/progress_reports)
+* [User guide](documentation/user_guide)
+

@@ -1,32 +1,9 @@
 from tkinter import Button, Label, Tk
-import random
 from PIL import Image, ImageTk
-
+from src.game import game_instance
 
 # Game Logic
-class Game:
-    def __init__(self):
-        self.choices = ["rock", "paper", "scissor"]
-        self.reset_scores()
 
-    def reset_scores(self):
-        self.scores = {"TIE": 0, "WIN": 0, "LOSE": 0}
-
-    def play(self, user_choice):
-        ai_choice = random.choice(self.choices)
-        if user_choice == ai_choice:
-            self.scores["TIE"] += 1
-            return "It's a tie!", ai_choice
-        elif (
-            (user_choice == "rock" and ai_choice == "scissor") or
-            (user_choice == "scissor" and ai_choice == "paper") or
-            (user_choice == "paper" and ai_choice == "rock")
-        ):
-            self.scores["WIN"] += 1
-            return "You win!", ai_choice
-        else:
-            self.scores["LOSE"] += 1
-            return "You lose :(", ai_choice
 
 # GUI
 class RockPaperScissorsApp:
@@ -35,9 +12,9 @@ class RockPaperScissorsApp:
         self.root = Tk()
         self.root.title("Rock, Paper, Scissors Game")
         self.root.configure(background='#9b59b6')
-        self.rock = ImageTk.PhotoImage(Image.open('static/rock.png'))
-        self.paper = ImageTk.PhotoImage(Image.open('static/paper.png'))
-        self.scissors = ImageTk.PhotoImage(Image.open('static/scissors.png'))
+        self.rock = ImageTk.PhotoImage(Image.open('src/static/rock.png'))
+        self.paper = ImageTk.PhotoImage(Image.open('src/static/paper.png'))
+        self.scissors = ImageTk.PhotoImage(Image.open('src/static/scissors.png'))
         self.images = {
             'rock': self.rock, 
             'paper': self.paper, 
@@ -81,6 +58,5 @@ class RockPaperScissorsApp:
     def run(self):
         self.root.mainloop()
 
-game_instance = Game()
 app = RockPaperScissorsApp(game_instance)
 app.run()
