@@ -1,6 +1,6 @@
 from tkinter import Button, Label, Tk
 from PIL import Image, ImageTk
-from src.game import game_instance
+from main.game import game_instance
 
 
 class RockPaperScissorsApp:
