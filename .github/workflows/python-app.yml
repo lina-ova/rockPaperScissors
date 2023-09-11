@@ -1,8 +1,6 @@
 name: Health Checks
 
-on:
-  pull_request:
-    branches: [main]
+on: push
 
 env:
   ACTIONS_CI: "is_in_github"
