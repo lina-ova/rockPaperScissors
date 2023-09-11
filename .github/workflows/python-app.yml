@@ -22,7 +22,7 @@ jobs:
       - name: Run Python unit tests
         run: python3 -m pytest
       - name: Conduct coverage reporting
-        run: coverage run --branch -m pytest main
+        run: coverage run --branch -m pytest src
       - name: Show coverage report
         run: coverage report -m
       - name: Upload coverage reports to Codecov
