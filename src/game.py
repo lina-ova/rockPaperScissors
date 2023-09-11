@@ -23,4 +23,5 @@ class game:
             self.scores["LOSE"] += 1
             return "You lose :(", ai_choice
         
+        
 game_instance = game()
