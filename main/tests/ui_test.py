@@ -34,3 +34,4 @@ class TestGame(unittest.TestCase):
         self.assertEqual(ai_choice, "paper")
         self.assertEqual(self.game.scores["LOSE"], 1)
 
+
