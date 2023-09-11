@@ -9,9 +9,9 @@ class RockPaperScissorsApp:
         self.root = Tk()
         self.root.title("Rock, Paper, Scissors Game")
         self.root.configure(background='#9b59b6')
-        self.rock = ImageTk.PhotoImage(Image.open('src/static/rock.png'))
-        self.paper = ImageTk.PhotoImage(Image.open('src/static/paper.png'))
-        self.scissors = ImageTk.PhotoImage(Image.open('src/static/scissors.png'))
+        self.rock = ImageTk.PhotoImage(Image.open('main/static/rock.png'))
+        self.paper = ImageTk.PhotoImage(Image.open('main/static/paper.png'))
+        self.scissors = ImageTk.PhotoImage(Image.open('main/static/scissors.png'))
         self.images = {
             'rock': self.rock, 
             'paper': self.paper, 
