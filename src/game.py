@@ -1,6 +1,4 @@
 import random
-
-
 class game:
     def __init__(self):
         self.choices = ["rock", "paper", "scissor"]
