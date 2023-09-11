@@ -11,18 +11,27 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-      - name: Install packages
+      
+      - name: Install system dependencies
+        run: sudo apt-get install -y xvfb
+      
+      - name: Install Python packages
         run: pip install pytest coverage Pillow
-      - name: Run Python unit tests
-        run: python3 -m pytest
-      - name: Conduct coverage reporting
-        run: coverage run --branch -m pytest main
+      
+      - name: Run Python unit tests with Xvfb
+        run: xvfb-run python3 -m pytest
+      
+      - name: Conduct coverage reporting with Xvfb
+        run: xvfb-run coverage run --branch -m pytest main
+      
       - name: Show coverage report
         run: coverage report -m
+      
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
