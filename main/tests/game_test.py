@@ -1,12 +1,22 @@
+"""Unit Tests for Rock Paper Scissors Game.
+
+This module contains a series of tests to validate the functionalities of
+the Rock Paper Scissors game. The game instance from the main.game module is
+utilized to perform these tests.
+"""
+
 import unittest
 from unittest.mock import patch
-
 from main.game import game_instance
 
+
 class TestGame(unittest.TestCase):
+    """Unit Test Suite for verifying Rock Paper Scissors game functionality."""
+
     def setUp(self):
+        """Setup method to initialize game instance before each test."""
         self.game = game_instance
-        
+
     def test_reset_scores(self):
         """Ensure that scores are reset correctly."""
         self.game.scores = {"TIE": 1, "WIN": 2, "LOSE": 3}
