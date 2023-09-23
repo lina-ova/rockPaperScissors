@@ -23,7 +23,7 @@ class RockPaperScissorsApp:
         self.images = {
             'rock': self.rock,
             'paper': self.paper,
-            'scissor': self.scissors
+            'scissors': self.scissors
         }
 
         # Labels
@@ -58,7 +58,7 @@ class RockPaperScissorsApp:
                command=lambda: self.play_move('paper')).grid(row=2, column=2)
 
         Button(self.root, width=20, height=2, text='SCISSORS', bg='#0ABDE3', fg='white',
-               command=lambda: self.play_move('scissor')).grid(row=2, column=3)
+               command=lambda: self.play_move('scissors')).grid(row=2, column=3)
 
     def play_move(self, user_input):
         """Execute a play move."""
