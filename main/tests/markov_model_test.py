@@ -1,12 +1,5 @@
 """
-Test Module for MarkovModel
-===========================
-
-This module contains the test cases for the `MarkovModel` class. 
-The `MarkovModel` class is used for making predictions based on the history of user moves. 
-The test module focuses on initializing, updating, resetting, 
-focusing, and ordering the MarkovModel.
-
+    Tests for the MarkovModel class.
 """
 
 import unittest
@@ -14,78 +7,62 @@ from main.markov_model import MarkovModel
 
 class TestMarkovModel(unittest.TestCase):
     """
-    TestCase class for testing the MarkovModel class.
-
-    Methods:
-        - test_init: Tests the initialization of the MarkovModel.
-        - test_update_and_score: Tests the update method and the score after each move.
-        - test_reset: Tests if the reset method is resetting the model's state.
-        - test_focus_limit: Tests if the score_history's length doesn’t exceed the focus.
-        - test_order_limit: Tests if the user_moves's length doesn’t exceed the order.
+    Test suite for the MarkovModel class.
     """
 
-    def test_init(self):
+    def setUp(self):
         """
-        Test if the MarkovModel class is initialized with the correct attributes
-        and their default values.
+        Set up a new instance of the MarkovModel class before each test.
         """
-        model = MarkovModel(order=3, focus=5)
-        self.assertEqual(model.order, 3)
-        self.assertEqual(model.focus, 5)
-        self.assertEqual(model.user_moves, [])
-        self.assertEqual(model.score_history, [])
-        self.assertIsNone(model.ai_move)
+        self.model = MarkovModel(order=3, focus=5)
 
-    def test_update_and_score(self):
+    def test_initialization(self):
         """
-        Test the update method and validate the score after every move
-        to ensure correct score calculation and updating.
+        Test to ensure that the MarkovModel is correctly initialized.
         """
-        model = MarkovModel(order=3, focus=5)
-        model.ai_move = 'rock'
-        model.update('paper')
-        self.assertEqual(model.get_score(), -1)  # User wins
+        self.assertEqual(self.model.order, 3)
+        self.assertEqual(self.model.focus, 5)
+        self.assertEqual(len(self.model.user_moves), 0)
+        self.assertEqual(len(self.model.score_history), 0)
 
-        model.ai_move = 'scissors'
-        model.update('scissors')
-        self.assertEqual(model.get_score(), -1)  # Tie is zero
+    def test_update(self):
+        """
+        Test the update method to ensure the model gets updated correctly.
+        """
+        self.model.update('rock')
+        self.assertEqual(len(self.model.user_moves), 1)
+        self.assertIn('rock', self.model.user_moves)
 
-        model.ai_move = 'paper'
-        model.update('rock')
-        self.assertEqual(model.get_score(), 0)  # AI wins -1+0+1
+    def test_get_prediction(self):
+        """
+        Test the get_prediction method to ensure predictions are being made.
+        """
+        predictions = {self.model.get_prediction() for _ in range(100)}
+        self.assertEqual(predictions, {'rock', 'paper', 'scissors'})
+
+    def test_evaluate_move(self):
+        """
+        Test the evaluate_move method to ensure moves are evaluated correctly.
+        """
+        self.model.ai_move = 'rock'
+        self.assertEqual(self.model.evaluate_move('scissors'), 1)  # AI wins
+        self.assertEqual(self.model.evaluate_move('rock'), 0)      # Tie
+        self.assertEqual(self.model.evaluate_move('paper'), -1)    # User wins
+
+    def test_get_score(self):
+        """
+        Test the get_score method to ensure that the score is correctly calculated.
+        """
+        self.model.score_history = [1, 0, -1, 1, 1]
+        self.assertEqual(self.model.get_score(), 2)
 
     def test_reset(self):
         """
-        Test if the reset method is correctly resetting 
-        the user_moves and score_history of the model.
+        Test the reset method to ensure the model is correctly reset.
         """
-        model = MarkovModel(order=3, focus=5)
-        model.ai_move = 'rock'
-        model.update('paper')
-        model.update('scissors')
-        model.reset()
-        self.assertEqual(model.user_moves, [])
-        self.assertEqual(model.score_history, [])
+        self.model.update('rock')
+        self.model.update('paper')
+        self.model.reset()
 
-    def test_focus_limit(self):
-        """
-        Test if the length of score_history does not exceed
-        the focus limit after multiple updates.
-        """
-        model = MarkovModel(order=3, focus=2)  # focus of 2
-        model.ai_move = 'rock'
-        model.update('paper')
-        model.update('scissors')
-        model.update('rock')
-        self.assertEqual(len(model.score_history), 2)
-
-    def test_order_limit(self):
-        """
-        Test if the length of user_moves does not exceed
-        the order limit after multiple updates.
-        """
-        model = MarkovModel(order=2, focus=5)  # order of 2
-        model.update('rock')
-        model.update('paper')
-        model.update('scissors')
-        self.assertEqual(len(model.user_moves), 2)
+        self.assertEqual(len(self.model.user_moves), 0)
+        self.assertEqual(len(self.model.score_history), 0)

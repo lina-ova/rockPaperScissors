@@ -1,4 +1,3 @@
-
 """
     Markov Model Module
     ===================
@@ -22,79 +21,98 @@
     'rock'
     >>> model.reset()
 """
+import random
+from collections import defaultdict, deque
+
 
 class MarkovModel:
     """
-    Represents a Markov Model for predicting user moves
-    and evaluating performance over a specified number of rounds.
+    A class that represents a Markov Model for predicting user moves
+    in a game and evaluates the model's performance over specified rounds.
     
     Attributes:
         order (int): The order of the Markov model.
-        focus (int): The number of rounds to focus on for resetting the score.
-        user_moves (list): A list to keep track of past user moves.
-        score_history (list): A list to keep track of scores.
-        ai_move (str): The AI's move in the current round.
+        focus (int): The number of rounds to consider for resetting the score.
+        user_moves (deque[str]): A deque that keeps track of past user moves.
+        score_history (deque[int]): A deque that keeps track of scores for each round.
+        ai_move (str): The AI's predicted move in the current round.
+        model (defaultdict): A dictionary to store sequences of moves and the count of the moves that follow them.
     """
 
-    def __init__(self, order, focus):
+    def __init__(self, order: int, focus: int):
         """
-        Initialize a new instance of the MarkovModel class.
+        Initializes a new instance of the MarkovModel class.
 
         :param order: The order of the Markov model.
-        :param focus: The number of rounds to focus on for resetting the score.
+        :param focus: The number of rounds to consider for resetting the score.
         """
         self.order = order
         self.focus = focus
-        self.user_moves = []
-        self.score_history = []
-        self.ai_move = None  # it's good to keep this as None if not yet determined.
+        self.user_moves = deque(maxlen=order)
+        self.score_history = deque(maxlen=focus)
+        self.ai_move = None
+        self.model = defaultdict(lambda: defaultdict(int))
 
-    def update(self, user_move):
+    def update(self, user_move: str):
         """
-        Update the model with the latest user_move, maintain the length of 
-        user_moves and score_history based on the order and focus respectively,
-        and update the score based on the moves played.
+        Updates the model with the latest user_move and maintains the length 
+        and score_history based on the focus. It also updates the score based 
+        on the moves played in the last round.
 
         :param user_move: The user's move played in the current round.
         """
-        # Maintain the lengths of user_moves and score_history.
         if len(self.user_moves) == self.order:
-            self.user_moves.pop(0)
-        if len(self.score_history) == self.focus:
-            self.score_history.pop(0)
+            key = tuple(self.user_moves)
+            self.model[key][user_move] += 1
 
-        # Append the latest move and score
+        # Add the move to history (if history exceeds 3 moves, the oldest will be removed)
         self.user_moves.append(user_move)
         self.score_history.append(self.evaluate_move(user_move))
 
-    def evaluate_move(self, user_move):
+
+    def evaluate_move(self, user_move: str):
         """
-        Evaluate the latest move and update the score.
-        
+        Evaluates the latest user move and returns the score for the latest round. 
+        1 if ai wins, 0 if it's a tie, -1 if user wins.
+
         :param user_move: The user's latest move.
         :return: The score for the latest round.
         """
-        lose_conditions = [('rock', 'paper'), ('paper', 'scissors'), ('scissors', 'rock')]
-        win_conditions = [('paper', 'rock'), ('scissors', 'paper'), ('rock', 'scissors')]
+        outcomes = {('rock', 'paper'): -1, ('paper', 'scissors'): -1, ('scissors', 'rock'): -1,
+                    ('paper', 'rock'): 1, ('scissors', 'paper'): 1, ('rock', 'scissors'): 1}
+        return outcomes.get((self.ai_move, user_move), 0)
 
-        if (self.ai_move, user_move) in lose_conditions:
-            return -1
-        if (self.ai_move, user_move) in win_conditions:
-            return 1
-        return 0  # Return 0 if it's a tie
-
-    def get_prediction(self):
+    def get_prediction(self) -> str:
         """
-        Predict the next user_move based on the history.
+        Predicts the next user move based on the history.
 
-        :return: The predicted user_move.
+        :return: The predicted next user move.
         """
-        # Implement prediction logic here based on the model's order and history
-        return 'paper'  # Placeholder, replace with actual prediction logic.
+
+        key = tuple(self.user_moves)
+
+        if len(self.user_moves) < self.order or not ( key in self.model and self.model[key]):
+            self.ai_move = random.choice(['rock', 'paper', 'scissors'])
+        else:
+            prediction = max(self.model[key], key=self.model[key].get)
+            self.ai_move = self.counter_move(prediction)
+
+        return self.ai_move
+
+
+
+    def counter_move(self, user_move: str):
+        """
+        Determines a move that will beat the predicted user move.
+
+        :param user_move: Predicted next user move.
+        :return: A move that will beat the user's predicted move.
+        """
+        return {'rock': 'paper', 'paper': 'scissors', 'scissors': 'rock'}.get(user_move, 'rock')
 
     def get_score(self):
         """
-        Calculate and return the current score of the model.
+        Calculates and returns the current score of the model.
 
         :return: The current score of the model.
         """
@@ -102,7 +120,8 @@ class MarkovModel:
 
     def reset(self):
         """
-        Reset the model to its initial state by clearing user_moves and score_history.
+        Resets the model to its initial state.
         """
         self.user_moves.clear()
         self.score_history.clear()
+        self.model = defaultdict(lambda: defaultdict(int))
