@@ -87,8 +87,8 @@ class TestGame(unittest.TestCase):
         different round scenarios and returning the expected results.
         """
         game = Game(focus=5)
-        self.assertEqual(game.evaluate_round("rock", "scissors"), ('You win!', 'rock'))
-        self.assertEqual(game.evaluate_round("rock", "paper"), ('You lose :(', 'rock'))
+        self.assertEqual(game.evaluate_round("rock", "scissors"), ('You lose :(', 'rock'))
+        self.assertEqual(game.evaluate_round("rock", "paper"), ('You win!', 'rock'))
         self.assertEqual(game.evaluate_round("rock", "rock"), ("It's a tie!", 'rock'))
 
     def test_models_update(self):

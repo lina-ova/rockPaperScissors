@@ -66,3 +66,18 @@ class TestMarkovModel(unittest.TestCase):
 
         self.assertEqual(len(self.model.user_moves), 0)
         self.assertEqual(len(self.model.score_history), 0)
+
+    def test_pattern_prediction(self):
+        """
+        Test model making actual predictions
+        """
+        # Feed the model a repeating pattern and see if it can predict and counter it.
+        pattern = ['rock', 'rock', 'rock']
+
+        for move in pattern:
+            self.model.update(move)
+
+        # After seeing the pattern, the model should predict 'rock' next,
+        # and therefore, it should counter with 'paper'.
+        prediction = self.model.get_prediction()
+        self.assertEqual(prediction, 'paper')

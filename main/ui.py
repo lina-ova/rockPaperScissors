@@ -35,10 +35,10 @@ class RockPaperScissorsApp:
 
         # Scores
         self.user_score = Label(self.root, text=0, font=100, bg='#9b59b6', fg='white')
-        self.user_score.grid(row=1, column=3)
+        self.user_score.grid(row=1, column=1)
 
         self.ai_score = Label(self.root, text=0, font=100, bg='#9b59b6', fg='white')
-        self.ai_score.grid(row=1, column=1)
+        self.ai_score.grid(row=1, column=3)
 
         # Indicators
         self.user_indicator = Label(self.root, font=50, text='USER', bg='#9b59b6', fg='white')

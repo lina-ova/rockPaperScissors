@@ -91,10 +91,10 @@ class Game:
         win_conditions = [('rock', 'paper'), ('paper', 'scissors'), ('scissors', 'rock')]
         lose_conditions = [('paper', 'rock'), ('scissors', 'paper'), ('rock', 'scissors')]
 
-        if (ai_move, user_move) in lose_conditions:
+        if (ai_move, user_move) in win_conditions:
             self.scores['WIN'] += 1
             return 'You win!', ai_move
-        elif (ai_move, user_move) in win_conditions:
+        elif (ai_move, user_move) in lose_conditions:
             self.scores['LOSE'] += 1
             return 'You lose :(', ai_move
         else:
