@@ -37,7 +37,7 @@ class TestMarkovModel(unittest.TestCase):
         """
         Test the get_prediction method to ensure predictions are being made.
         """
-        predictions = {self.model.get_prediction() for _ in range(100)}
+        predictions = {self.model.get_prediction() for _ in range(20)}
         self.assertEqual(predictions, {'rock', 'paper', 'scissors'})
 
     def test_evaluate_move(self):

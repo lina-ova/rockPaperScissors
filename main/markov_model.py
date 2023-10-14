@@ -65,7 +65,7 @@ class MarkovModel:
             key = tuple(self.user_moves)
             self.model[key][user_move] += 1
 
-        # Add the move to history (if history exceeds 3 moves, the oldest will be removed)
+        # Add the move to history (if history exceeds order number of moves, the oldest will be removed)
         self.user_moves.append(user_move)
         self.score_history.append(self.evaluate_move(user_move))
 
